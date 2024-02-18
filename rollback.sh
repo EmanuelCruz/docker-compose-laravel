@@ -37,10 +37,10 @@ function ejecutar_comando {
 
 # Ejecutar comandos
 ejecutar_comando "docker compose down" "Detener y borrar contenedores Docker" "Detener y borrar contenedores Docker (docker compose down)"
-ejecutar_comando "rm -rf node_modules" "Eliminar node_modules" "Eliminar node_modules (rm -rf node_modules)"
-ejecutar_comando "rm -rf vendor" "Eliminar vendor" "Eliminar vendor (rm -rf vendor)"
+# ejecutar_comando "rm -rf src/node_modules" "Eliminar node_modules" "Eliminar node_modules (rm -rf src/node_modules)"
+# ejecutar_comando "rm -rf src/vendor" "Eliminar vendor" "Eliminar vendor (rm -rf src/vendor)"
 # Borrar contenido de carpeta de persistencia de MySQL
-ejecutar_comando "rm -r data/mysql/*" "Eliminar datos de MySQL" "Eliminar datos de MySQL (rm -r data/mysql/*)"
+ejecutar_comando "rm -rf data/mysql/*" "Eliminar datos de MySQL" "Eliminar datos de MySQL (rm -rf data/mysql/*)"
 
 # Mostrar resumen de ejecución
 echo ""

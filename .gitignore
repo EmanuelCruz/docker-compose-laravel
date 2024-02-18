@@ -5,5 +5,5 @@
 /.vscode
 
 # docker
-/.docker/mysql/data/*
-!.docker/mysql/data/
+/data/mysql/*
+!data/mysql/

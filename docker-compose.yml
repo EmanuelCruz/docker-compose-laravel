@@ -26,7 +26,7 @@ services:
         container_name: ${COMPOSE_PROJECT_NAME}-php
         build:
             context: .
-            dockerfile: .docker/php/dockerfile
+            dockerfile: ${PATH_SERVICES}/php/dockerfile
             args:
                 - PHP_VERSION=${PHP_VERSION}
                 - UID=${UID:-1000}
@@ -53,7 +53,7 @@ services:
             MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-root}
             TZ: "America/Argentina/Buenos_Aires"
         volumes:
-            - ${PATH_SERVICES}/mysql/data:/var/lib/mysql
+            - ${PATH_DATA_MYSQL}:/var/lib/mysql
         networks:
             - laravel
 
@@ -71,7 +71,7 @@ services:
         container_name: ${COMPOSE_PROJECT_NAME}-artisan
         build:
             context: .
-            dockerfile: .docker/php/dockerfile
+            dockerfile: ${PATH_SERVICES}/php/dockerfile
             args:
                 - PHP_VERSION=${PHP_VERSION}
                 - UID=${UID:-1000}

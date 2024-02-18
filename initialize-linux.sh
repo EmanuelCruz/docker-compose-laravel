@@ -51,15 +51,22 @@ fallidos=()
 
 # Ejecutar comandos y verificar su código de salida
 ejecutar_comando "docker compose up -d --build" "Construir contenedores Docker" "Construir contenedores Docker (docker compose up -d --build)"
-ejecutar_comando "docker compose run --rm composer install" "Instalar dependencias de Composer" "Instalar dependencias de Composer (docker compose run --rm composer install)"
+# composer install
+# ejecutar_comando "docker compose run --rm composer install" "Instalar dependencias de Composer" "Instalar dependencias de Composer (docker compose run --rm composer install)"
 # ejecutar_comando "sudo chown -R $USER_NAME:$GROUP_NAME ./src/vendor" "Cambiar permisos de carpeta vendor" "Cambiar permisos de carpeta vendor (sudo chown -R $USER_NAME:$GROUP_NAME ./src/vendor)"
-ejecutar_comando "docker compose run --rm npm install" "Instalar dependencias de NPM" "Instalar dependencias de NPM (docker compose run --rm npm install)"
+# npm install
+# ejecutar_comando "docker compose run --rm npm install" "Instalar dependencias de NPM" "Instalar dependencias de NPM (docker compose run --rm npm install)"
 # ejecutar_comando "sudo chown -R $USER_NAME:$GROUP_NAME ./src/node_modules" "Cambiar permisos de carpeta node_modules" "Cambiar permisos de carpeta node_modules (sudo chown -R $USER_NAME:$GROUP_NAME ./src/node_modules)"
-ejecutar_comando "docker compose run --rm artisan key:generate" "Generar clave de aplicación" "Generar clave de aplicación (docker compose run --rm artisan key:generate)"
-ejecutar_comando "docker compose run --rm artisan migrate" "Ejecutar migraciones de base de datos" "Ejecutar migraciones de base de datos (docker compose run --rm artisan migrate)"
-ejecutar_comando "docker compose run --rm artisan db:seed" "Insertar datos de seeds en la base de datos" "Insertar datos de seeds en la base de datos (docker compose --env-file .docker/.env run --rm artisan db:seed)"
-ejecutar_comando "sudo chmod -R 775 ./src/storage" "Cambiar permisos de carpeta storage" "Cambiar permisos de carpeta storage (sudo chmod -R 775 ./src/storage)"
-sejecutar_comando "sudo chmod +x aliases.sh" "Dar permisos de ejecución a aliases.sh" "Dar permisos de ejecución a aliases.sh (sudo chmod +x aliases.sh)"
+# Artisan Migrate + Seed
+# ejecutar_comando "docker compose run --rm artisan key:generate" "Generar clave de aplicación" "Generar clave de aplicación (docker compose run --rm artisan key:generate)"
+# Artisan Migrate + Seed
+# ejecutar_comando "docker compose run --rm artisan migrate --seed" "Ejecutar migraciones y seeds de base de datos" "Ejecutar migraciones y seeds de base de datos (docker compose run --rm artisan migrate)"
+# Permisos de carpeta Storage
+# ejecutar_comando "sudo chmod -R 775 ./src/storage" "Cambiar permisos de carpeta storage" "Cambiar permisos de carpeta storage (sudo chmod -R 775 ./src/storage)"
+# Permisos script aliases
+ejecutar_comando "sudo chmod +x aliases.sh" "Dar permisos de ejecución a aliases.sh" "Dar permisos de ejecución a aliases.sh (sudo chmod +x aliases.sh)"
+# Permisos script rollback
+ejecutar_comando "sudo chmod +x rollback-linux.sh" "Dar permisos de ejecución a rollback-linux.sh" "Dar permisos de ejecución a aliases.sh (sudo chmod +x rollback-linux.sh.sh)"
 
 
 # Mostrar resumen de ejecución

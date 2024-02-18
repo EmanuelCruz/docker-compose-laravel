@@ -38,13 +38,20 @@ fallidos=()
 
 # Ejecutar comandos y verificar su código de salida
 ejecutar_comando "docker compose up -d --build" "Construir contenedores Docker" "Construir contenedores Docker (docker compose up -d --build)"
-ejecutar_comando "docker compose run --rm composer install" "Instalar dependencias de Composer" "Instalar dependencias de Composer (docker compose run --rm composer install)"
-ejecutar_comando "docker compose run --rm npm install" "Instalar dependencias de NPM" "Instalar dependencias de NPM (docker compose run --rm npm install)"
-ejecutar_comando "docker compose run --rm artisan key:generate" "Generar clave de aplicación" "Generar clave de aplicación (docker compose run --rm artisan key:generate)"
-ejecutar_comando "docker compose run --rm artisan migrate" "Ejecutar migraciones de base de datos" "Ejecutar migraciones de base de datos (docker compose run --rm artisan migrate)"
-ejecutar_comando "docker compose run --rm artisan db:seed" "Insertar datos de seeds en la base de datos" "Insertar datos de seeds en la base de datos (docker compose run --rm artisan db:seed)"
-ejecutar_comando "chmod -R 775 ./src/storage" "Cambiar permisos de carpeta storage" "Cambiar permisos de carpeta storage (chmod -R 775 storage)"
+# composer install
+# ejecutar_comando "docker compose run --rm composer install" "Instalar dependencias de Composer" "Instalar dependencias de Composer (docker compose run --rm composer install)"
+# npm install
+# ejecutar_comando "docker compose run --rm npm install" "Instalar dependencias de NPM" "Instalar dependencias de NPM (docker compose run --rm npm install)"
+# Artisan Migrate + Seed
+# ejecutar_comando "docker compose run --rm artisan key:generate" "Generar clave de aplicación" "Generar clave de aplicación (docker compose run --rm artisan key:generate)"
+# Artisan Migrate + Seed
+# ejecutar_comando "docker compose run --rm artisan migrate --seed" "Ejecutar migraciones y seeds de base de datos" "Ejecutar migraciones y seeds de base de datos (docker compose run --rm artisan migrate)"
+# Permisos de carpeta Storage
+# ejecutar_comando "chmod -R 775 ./src/storage" "Cambiar permisos de carpeta storage" "Cambiar permisos de carpeta storage (chmod -R 775 ./src/storage)"
+# Permisos script aliases
 ejecutar_comando "chmod +x aliases.sh" "Dar permisos de ejecución a aliases.sh" "Dar permisos de ejecución a aliases.sh (chmod +x aliases.sh)"
+# Permisos script rollback
+ejecutar_comando "sudo chmod +x rollback-linux.sh" "Dar permisos de ejecución a rollback-linux.sh" "Dar permisos de ejecución a aliases.sh (sudo chmod +x rollback-linux.sh.sh)"
 
 # Mostrar resumen de ejecución
 echo ""
