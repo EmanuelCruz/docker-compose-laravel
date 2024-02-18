@@ -1,0 +1,65 @@
+ARG PHP_VERSION=$PHP_VERSION
+
+FROM php:${PHP_VERSION}-fpm-alpine
+
+ARG UID=$UID
+ARG USER_NAME=$USER_NAME
+
+RUN adduser -G root --system -D -s /bin/sh -u ${UID} ${USER_NAME}
+
+# Crear directorio para la aplicación
+RUN mkdir -p /var/www/html
+
+WORKDIR /var/www/html
+
+# Instalar librerias necesarias
+RUN apk add --no-cache --virtual .build-deps \
+    $PHPIZE_DEPS \
+    oniguruma-dev \
+    postgresql-dev \
+    sqlite-dev \
+    libxml2-dev \
+    gmp-dev \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    libzip-dev \
+    freetype-dev \
+    curl
+
+# Instalar extensiones de PHP necesarias
+RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl soap xml mysqli gd
+
+RUN apk add --no-cache \
+    libpng-dev \
+    openldap-dev \
+    icu-dev \
+    libwebp-dev \
+    libzip \
+    libwebp-dev \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev
+
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
+
+# Instalación de Composer
+ARG COMPOSER_VERSION=$COMPOSER_VERSION
+
+# Descarga el instalador de Composer
+RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
+
+# Verifica el instalador de Composer
+RUN php -r "if (hash_file('sha384', 'composer-setup.php') === 'edb40769019ccf227279e3bdd1f5b2e9950eb000c3233ee85148944e555d97be3ea4f40c3c2fe73b22f875385f6a5155') { echo 'Instalador de Composer válido'; } else { echo 'Instalador de Composer corrupto'; unlink('composer-setup.php'); exit(1); }"
+
+# Ejecuta el instalador de Composer
+RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION}
+
+# Elimina el instalador de Composer
+RUN rm composer-setup.php
+# Fin instalación de Composer
+
+# Limpia dependencias
+RUN apk del .build-deps \
+    && rm -rf /tmp/*
+
+USER ${USER_NAME}

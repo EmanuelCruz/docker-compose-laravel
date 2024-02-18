@@ -1,0 +1,15 @@
+ARG PHP_VERSION=$PHP_VERSION
+
+FROM php:${PHP_VERSION}-fpm-alpine
+
+ARG UID=$UID
+ARG USER_NAME=$USER_NAME
+
+RUN adduser -G root --system -D -s /bin/sh -u ${UID} ${USER_NAME}
+
+# Crear directorio para la aplicación
+RUN mkdir -p /var/www/html
+
+WORKDIR /var/www/html
+
+USER ${USER_NAME}

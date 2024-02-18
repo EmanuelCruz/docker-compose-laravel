@@ -1,0 +1,16 @@
+ARG PHP_VERSION=$PHP_VERSION
+
+FROM nginx:${NGINX_VERSION}-alpine
+
+ARG UID=$UID
+ARG USER_NAME=$USER_NAME
+
+RUN adduser -G root --system -D -s /bin/sh -u ${UID} ${USER_NAME}
+
+ADD default.conf /etc/nginx/conf.d/default.conf
+
+RUN mkdir -p /var/www/html
+
+WORKDIR /var/www/html
+
+USER ${USER_NAME}

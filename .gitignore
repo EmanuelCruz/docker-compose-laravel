@@ -1,0 +1,9 @@
+.env
+.env.backup
+.env.production
+/.idea
+/.vscode
+
+# docker
+/.docker/mysql/data/*
+!.docker/mysql/data/
