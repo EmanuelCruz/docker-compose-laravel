@@ -8,7 +8,6 @@ Instrucciones para levantar el entorno de desarrollo con docker compose
 
     ```bash
     cp .env.example .env
-    cp ./.docker/.env.example ./.docker/.env
     ```
 
 2. Dar permisos de ejecución para initialize (si es necesario)
