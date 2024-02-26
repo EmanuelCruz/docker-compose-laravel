@@ -41,6 +41,10 @@ ejecutar_comando "docker compose down" "Detener y borrar contenedores Docker" "D
 # ejecutar_comando "rm -rf src/vendor" "Eliminar vendor" "Eliminar vendor (rm -rf src/vendor)"
 # Borrar contenido de carpeta de persistencia de MySQL
 ejecutar_comando "rm -rf data/mysql/*" "Eliminar datos de MySQL" "Eliminar datos de MySQL (rm -rf data/mysql/*)"
+# Dejar vacia la carpeta src
+ejecutar_comando "rm -rf src/* && rm -rf src/.*" "Dejar vacia la carpeta src" "Dejar vacia la carpeta src (rm -rf src/* && rm -rf src/.*)"
+# Volver a generara .gitkeep
+ejecutar_comando "touch src/.gitkeep" "Dejar vacia la carpeta src" "Dejar vacia la carpeta src (touch src/.gitkeep)"
 
 # Mostrar resumen de ejecución
 echo ""

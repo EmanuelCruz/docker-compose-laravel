@@ -1,18 +1,19 @@
 #!/bin/bash
 
-# Verificar si el archivo .env existe y leer las variables UID y GID si está presente
-# if [ -f .docker/.env ]; then
-#   while IFS='=' read -r key value; do
-#     if [[ $key == "USER_NAME" ]]; then
-#       USER_NAME=$value
+# Verificar si el archivo .env existe y leer las variables LARAVEL_VERSION
+if [ -f .env ]; then
+  while IFS='=' read -r key value; do
+    if [[ $key == "LARAVEL_VERSION" ]]; then
+      LARAVEL_VERSION=$value
 #     elif [[ $key == "GROUP_NAME" ]]; then
 #       GROUP_NAME=$value
-#     fi
-#   done < .docker/.env
-# fi
+    fi
+  done < .env
+fi
 
 # USER_NAME=${USER_NAME}
 # GROUP_NAME=${GROUP_NAME}
+LARAVEL_VERSION=${LARAVEL_VERSION}
 
 # Función para mostrar un mensaje de error y salir del script
 function mostrar_error {
@@ -67,7 +68,14 @@ ejecutar_comando "docker compose up -d --build" "Construir contenedores Docker" 
 ejecutar_comando "sudo chmod +x aliases.sh" "Dar permisos de ejecución a aliases.sh" "Dar permisos de ejecución a aliases.sh (sudo chmod +x aliases.sh)"
 # Permisos script rollback
 ejecutar_comando "sudo chmod +x rollback-linux.sh" "Dar permisos de ejecución a rollback-linux.sh" "Dar permisos de ejecución a aliases.sh (sudo chmod +x rollback-linux.sh.sh)"
-
+# Dejar vacia la carpeta src
+ejecutar_comando "sudo rm -rf src/.gitkeep" "Dejar vacia la carpeta src" "Dejar vacia la carpeta src (sudo rm -rf src/.gitkeep)"
+# Instalar proyecto laravel
+ejecutar_comando "docker-compose exec php composer create-project laravel/laravel . $LARAVEL_VERSION" "Instalar Laravel" "Instalar Laravel (docker-compose exec php composer create-project laravel/laravel . $LARAVEL_VERSION)"
+# Permisos de src
+ejecutar_comando "sudo chown -R $USER:$USER src" "Cambiar usuario y grupo de la carpeta src" "Cambiar usuario y grupo de la carpeta src (chown -R $USER:$USER src)"
+# Permisos de carpeta Storage
+ejecutar_comando "sudo chmod -R 775 ./src/storage" "Cambiar permisos de carpeta storage" "Cambiar permisos de carpeta storage (chmod -R 775 ./src/storage)"
 
 # Mostrar resumen de ejecución
 echo ""

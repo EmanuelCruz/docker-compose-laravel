@@ -32,6 +32,7 @@ services:
                 - UID=${UID:-1000}
                 - USER_NAME=${USER_NAME:-laravel}
                 - COMPOSER_VERSION=${COMPOSER_VERSION}
+                - LARAVEL_VERSION=${LARAVEL_VERSION}
         volumes:
             - ${PATH_SRC}:/var/www/html
         ports:
@@ -77,6 +78,7 @@ services:
                 - UID=${UID:-1000}
                 - USER_NAME=${USER_NAME:-laravel}
                 - COMPOSER_VERSION=${COMPOSER_VERSION}
+                - LARAVEL_VERSION=${LARAVEL_VERSION}
         entrypoint: ['php', '/var/www/html/artisan']
         volumes:
             - ${PATH_SRC}:/var/www/html

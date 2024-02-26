@@ -1,43 +1,45 @@
 # Documentación
 
-Instrucciones para levantar el entorno de desarrollo con docker
-
-Para ejecutar los comandos `docker` o `docker compose` hay que pararse en la carpeta `.docker`
+Instrucciones para levantar el entorno de desarrollo con docker compose 
 
 ## Paso para levantar app
 
-1. Crear lo `.env` de laravel y de `.docker`
+1. Crear lo `.env` para configurar las versiones de los servicios
 
     ```bash
     cp .env.example .env
     cp ./.docker/.env.example ./.docker/.env
     ```
 
-2. Obtener los `UID` y `GID` y agregarlo en el `./.docker/.env`
+2. Dar permisos de ejecución para initialize (si es necesario)
 
-    ```bash
-    ls -n
-    ```
-
-3. Hacer lo mismo para `USER_NAME` y `GROUP_NAME` en el `./.docker/.env`
-
-    ```bash
-    ls -al
-    ```
-
-4. Generara carpeta `.docker/mysql/data/`
-    
     En Linux (o WSL):
     ```bash
-    mkdir .docker/mysql/data/
+    sudo chmod +x initialize-linux.sh
     ```
 
     En Windows:
     ```bash
-    mkdir .docker\mysql\data\
+    chmod +x initialize.sh
     ```
 
-5. Agregar host en el archivo `driver/etc/host`
+3. Revisar si el `dockerfile` del `services/php` tiene actualizado el hash que se utiliza para instalar la version de composer correspondiente. Revisarlo en https://getcomposer.org/download/
+
+3. Levantar ambiente de desarrollo, y crear proyecto laravel
+
+    En Linux (o WSL):
+    ```bash
+    ./initialize-linux.sh
+    ```
+
+    En Windows:
+    ```bash
+    sh initialize.sh
+    ```
+
+    > Recomendación para Windows: Aumentar los recursos que utiliza docker, en caso de que instalación las librerías de composer se detenga, por mucho tiempo, y no finalize.
+
+3. Agregar host en el archivo `driver/etc/host`
 
     En Linux:
     ```bash
@@ -51,19 +53,6 @@ Para ejecutar los comandos `docker` o `docker compose` hay que pararse en la car
     ```bash
     x.x.x.x   first-livewire.local.com
     ```
-
-6. Instalación de contenedores, librerías y migración (ubicarse en .docker)
-
-    En Linux (o WSL):
-    ```bash
-    ./initialize-linux.sh
-    ```
-
-    En Windows:
-    ```bash
-    sh initialize.sh
-    ```
-    > Recomendación para Windows: Aumentar los recursos que utiliza docker, en caso de que instalación las librerías de composer se detenga, por mucho tiempo, y no finalize.
 
 7. Ejecución de Vite
 
@@ -86,18 +75,19 @@ Para ejecutar los comandos `docker` o `docker compose` hay que pararse en la car
     - Ejecutar `npm run dev`
 
         ```bash
-        docker compose --env-file .docker/.env run --rm --service-ports npm run dev
+        docker compose run --rm --service-ports npm run dev
         ```
 
 8. (OPCIONAL) Hacer el build de los assets
 
     ```bash
-    docker compose --env-file .docker/.env run --rm --service-ports npm run build
+    docker compose run --rm --service-ports npm run build
     ```
 
     > En caso de ser necesario cambiar el usuario y el grupo de los archivos creados en `../public/build/`.
     >
     > Comando: `sudo chown -R usuario:grupo ../public/build/`
+
 
 ## Conectarse a la DB desde un administrador de base de datos
 
@@ -134,21 +124,21 @@ database: laraveldb
 3. En caso de modificar las variables de entorno ejecutar los siguientes comandos
 
     ```bash
-    docker compose --env-file .docker/.env down -v
-    docker compose --env-file .docker/.env up -d --build
+    docker compose down -v
+    docker compose up -d --build
     ```
 
 4. En caso de que necesites entrar a uno de los contenedores (servicios)
 
     ```bash
     # contenedor Nginx
-    docker compose --env-file .docker/.env exec nginx sh
+    docker compose exec nginx sh
     # contenedor php
-    docker compose --env-file .docker/.env exec php sh
+    docker compose exec php sh
     # contenedor mysql
-    docker compose --env-file .docker/.env exec mysql sh
+    docker compose exec mysql sh
     # contenedor redis
-    docker compose --env-file .docker/.env exec redis sh
+    docker compose exec redis sh
     ```
 
 5. Si necesitas revisar el contenedor de mysql, para ver usuario y tablas
@@ -173,5 +163,5 @@ database: laraveldb
 7. En caso de que la instalación de las librerías npm de error, intentar borrar la cache de npm
 
     ```bash
-    docker compose --env-file .docker/.env run --rm npm cache clean --force
+    docker compose run --rm npm cache clean --force
     ```
