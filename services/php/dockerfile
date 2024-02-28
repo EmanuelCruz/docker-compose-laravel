@@ -1,4 +1,12 @@
+ARG COMPOSER_VERSION=$COMPOSER_VERSION
 ARG PHP_VERSION=$PHP_VERSION
+ARG NODE_VERSION=$NODE_VERSION
+
+# Multi stage de Composer
+FROM composer:${COMPOSER_VERSION} AS composer
+
+# Multi stage de NodeJS
+FROM node:${NODE_VERSION}-alpine AS node
 
 FROM php:${PHP_VERSION}-fpm-alpine
 
@@ -43,20 +51,30 @@ RUN apk add --no-cache \
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 
 # Instalación de Composer
-ARG COMPOSER_VERSION=$COMPOSER_VERSION
+# ARG COMPOSER_VERSION=$COMPOSER_VERSION
 
 # Descarga el instalador de Composer
-RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
+# RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
 
 # Verifica el instalador de Composer
-RUN php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Instalador de Composer válido'; } else { echo 'Instalador de Composer corrupto'; unlink('composer-setup.php'); exit(1); }"
+# RUN php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Instalador de Composer válido'; } else { echo 'Instalador de Composer corrupto'; unlink('composer-setup.php'); exit(1); }"
 
 # Ejecuta el instalador de Composer
-RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION}
+# RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION}
 
 # Elimina el instalador de Composer
-RUN rm composer-setup.php
+# RUN rm composer-setup.php
 # Fin instalación de Composer
+
+# Copia el ejecutable de Composer desde la etapa de construcción
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+# # Copia el ejecutable de NodeJs desde la etapa de construcción
+# COPY --from=node /usr/local/bin/node /usr/local/bin/node
+# # Copia los archivos necesarios de npm
+# RUN curl -L https://npmjs.org/install.sh | sh
+# COPY --from=node /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+# COPY --from=node /usr/local/lib/node_modules/npm/lib /usr/local/lib/node_modules/npm/lib
 
 # Limpia dependencias
 RUN apk del .build-deps \

@@ -2,13 +2,13 @@
 
 # Verificar si el archivo .env existe y leer las variables LARAVEL_VERSION
 if [ -f .env ]; then
-  while IFS='=' read -r key value; do
-    if [[ $key == "LARAVEL_VERSION" ]]; then
-      LARAVEL_VERSION=$value
-#     elif [[ $key == "GROUP_NAME" ]]; then
-#       GROUP_NAME=$value
-    fi
-  done < .env
+    while IFS='=' read -r key value; do
+        if [[ $key == "LARAVEL_VERSION" ]]; then
+            LARAVEL_VERSION=$value
+            #     elif [[ $key == "GROUP_NAME" ]]; then
+            #       GROUP_NAME=$value
+        fi
+    done <.env
 fi
 
 # USER_NAME=${USER_NAME}
@@ -17,7 +17,7 @@ LARAVEL_VERSION=${LARAVEL_VERSION}
 
 # Función para mostrar un mensaje de error y salir del script
 function mostrar_error {
-    echo "Error: $1" >&2  # Imprimir mensaje de error en stderr
+    echo "Error: $1" >&2 # Imprimir mensaje de error en stderr
     exit 1               # Salir con código de error 1
 }
 
@@ -54,28 +54,29 @@ fallidos=()
 ejecutar_comando "docker compose up -d --build" "Construir contenedores Docker" "Construir contenedores Docker (docker compose up -d --build)"
 # composer install
 # ejecutar_comando "docker compose run --rm composer install" "Instalar dependencias de Composer" "Instalar dependencias de Composer (docker compose run --rm composer install)"
-# ejecutar_comando "sudo chown -R $USER_NAME:$GROUP_NAME ./src/vendor" "Cambiar permisos de carpeta vendor" "Cambiar permisos de carpeta vendor (sudo chown -R $USER_NAME:$GROUP_NAME ./src/vendor)"
 # npm install
 # ejecutar_comando "docker compose run --rm npm install" "Instalar dependencias de NPM" "Instalar dependencias de NPM (docker compose run --rm npm install)"
-# ejecutar_comando "sudo chown -R $USER_NAME:$GROUP_NAME ./src/node_modules" "Cambiar permisos de carpeta node_modules" "Cambiar permisos de carpeta node_modules (sudo chown -R $USER_NAME:$GROUP_NAME ./src/node_modules)"
-# Artisan Migrate + Seed
-# ejecutar_comando "docker compose run --rm artisan key:generate" "Generar clave de aplicación" "Generar clave de aplicación (docker compose run --rm artisan key:generate)"
-# Artisan Migrate + Seed
-# ejecutar_comando "docker compose run --rm artisan migrate --seed" "Ejecutar migraciones y seeds de base de datos" "Ejecutar migraciones y seeds de base de datos (docker compose run --rm artisan migrate)"
-# Permisos de carpeta Storage
-# ejecutar_comando "sudo chmod -R 775 ./src/storage" "Cambiar permisos de carpeta storage" "Cambiar permisos de carpeta storage (sudo chmod -R 775 ./src/storage)"
-# Permisos script aliases
 ejecutar_comando "sudo chmod +x aliases.sh" "Dar permisos de ejecución a aliases.sh" "Dar permisos de ejecución a aliases.sh (sudo chmod +x aliases.sh)"
 # Permisos script rollback
 ejecutar_comando "sudo chmod +x rollback-linux.sh" "Dar permisos de ejecución a rollback-linux.sh" "Dar permisos de ejecución a aliases.sh (sudo chmod +x rollback-linux.sh.sh)"
 # Dejar vacia la carpeta src
 ejecutar_comando "sudo rm -rf src/.gitkeep" "Dejar vacia la carpeta src" "Dejar vacia la carpeta src (sudo rm -rf src/.gitkeep)"
 # Instalar proyecto laravel
-ejecutar_comando "docker-compose exec php composer create-project laravel/laravel . $LARAVEL_VERSION" "Instalar Laravel" "Instalar Laravel (docker-compose exec php composer create-project laravel/laravel . $LARAVEL_VERSION)"
+ejecutar_comando "docker-compose exec php composer create-project laravel/laravel . $LARAVEL_VERSION" "Instalar Laravel" "Instalar Laravel (docker-compose exec php composer create-project laravel/laravel . $LARAVEL_VERSION)"di
+# # Migraciones Artisan
+# ejecutar_comando "docker compose exec php php artisan migrate --seed" "Ejecutar migraciones y seeds de base de datos" "Ejecutar migraciones y seeds de base de datos (docker compose run --rm artisan migrate)"
 # Permisos de src
 ejecutar_comando "sudo chown -R $USER:$USER src" "Cambiar usuario y grupo de la carpeta src" "Cambiar usuario y grupo de la carpeta src (chown -R $USER:$USER src)"
+# Permisos de carpeta vendor
+ejecutar_comando "sudo chown -R $USER_NAME:$GROUP_NAME ./src/vendor" "Cambiar permisos de carpeta vendor" "Cambiar permisos de carpeta vendor (sudo chown -R $USER_NAME:$GROUP_NAME ./src/vendor)"
+#Instalar librerias npm
+ejecutar_comando "docker compose run --rm npm install" "Instalar librerias npm" "Instalar librerias npm (docker compose run --rm npm install)"
+# Permisos de carpeta node_modules
+ejecutar_comando "sudo chmod -R 777 ./src/node_modules" "Cambiar permisos de carpeta node_modules" "Cambiar permisos de carpeta node_modules (sudo chmod -R 777 ./src/node_modules)"
 # Permisos de carpeta Storage
 ejecutar_comando "sudo chmod -R 775 ./src/storage" "Cambiar permisos de carpeta storage" "Cambiar permisos de carpeta storage (chmod -R 775 ./src/storage)"
+
+# ejecutar_comando "docker compose exec php chmod -R 777 /var/www/html/public" "Cambiar permisos de carpeta storage" "Cambiar permisos de carpeta storage (docker compose exec php chmod -R 777 /var/www/html/public)"
 
 # Mostrar resumen de ejecución
 echo ""
@@ -97,7 +98,7 @@ if [ ${#fallidos[@]} -gt 0 ]; then
         echo "❌  $fallido"
     done
     echo "----------------------------------------------------------------------------------"
-    exit 1  # Salir con código de error 1 si hay comandos fallidos
+    exit 1 # Salir con código de error 1 si hay comandos fallidos
 else
     echo "Todos los comandos se ejecutaron exitosamente."
 fi
